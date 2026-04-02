@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %} | Rushda</title>
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <a href="/" class="brand-logo">
+                <i class="fa-solid fa-file-pdf"></i> PDF Chat Bot
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="nav-links">
+                {% if session.get('username') %}
+                {% if session.get('role') == 'admin' %}
+                <a href="/admin/syllabus" class="nav-item"><i class="fa-solid fa-book"></i> Syllabus</a>
+                <a href="/admin/users" class="nav-item"><i class="fa-solid fa-users"></i> Users</a>
+                <a href="/admin/feedbacks" class="nav-item"><i class="fa-solid fa-comments"></i> Admin</a>
+                {% else %}
+                <a href="/user_dashboard" class="nav-item"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+                {% endif %}
+                <a href="/logout" class="nav-btn btn-secondary"><i class="fa-solid fa-right-from-bracket"></i>
+                    Logout</a>
+                {% else %}
+                <!--<a href="/login" class="nav-btn btn-primary">Login</a> -->
+                <a href="/register" class="nav-btn btn-secondary">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    <button class="close-alert">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Rushda. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (mobileBtn) {
+            mobileBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // Close Alerts
+        document.querySelectorAll('.close-alert').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.target.parentElement.style.display = 'none';
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

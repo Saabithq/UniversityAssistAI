@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Materials{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <a href="/admin/subject/{{ unit[1] }}/units"
+            style="color: var(--secondary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Units
+        </a>
+        <h1>Manage Materials</h1>
+        <p style="color: var(--secondary);">For Unit: <span style="color: var(--primary); font-weight: 600;">{{ unit[2]
+                }}</span></p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+
+    <!-- Add Material Form -->
+    <div class="card" style="height: fit-content;">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Upload Material</h3>
+        <form action="/admin/unit/{{ unit[0] }}/materials" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="form-label">Title</label>
+                <input type="text" name="title" class="form-control" placeholder="e.g. Lecture Notes" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">File (PDF only)</label>
+                <input type="file" name="pdf" class="form-control" accept=".pdf" required style="padding: 0.7rem;">
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-upload"></i> Upload
+            </button>
+        </form>
+    </div>
+
+    <!-- Material List -->
+    <div class="card">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Existing Materials</h3>
+
+        {% if materials %}
+        <div style="display: grid; gap: 1rem;">
+            {% for material in materials %}
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #F8FAFB; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div
+                        style="width: 40px; height: 40px; background: rgba(255, 117, 76, 0.1); color: var(--accent); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1rem;">
+                            <a href="/static/{{ material[3] }}" target="_blank"
+                                style="text-decoration: none; color: var(--text-primary);">
+                                {{ material[2] }}
+                            </a>
+                        </h4>
+                        <span style="font-size: 0.8rem; color: var(--secondary);">PDF Document</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <a href="/static/{{ material[3] }}" target="_blank" class="btn-secondary"
+                        style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+                        <i class="fa-solid fa-eye"></i> View
+                    </a>
+                    <form action="/admin/material/delete/{{ material[0] }}" method="post" style="display:inline;"
+                        onsubmit="return confirm('Delete this material?');">
+                        <button type="submit" class="btn-secondary"
+                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 2rem; color: var(--secondary);">
+            <i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+            <p>No materials found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    @media (max-width: 900px) {
+        div[style*="grid-template-columns: 1fr 2fr"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <h1>Admin Dashboard</h1>
+        <p style="color: var(--secondary);">Overview and Management Control</p>
+    </div>
+    <div style="color: var(--text-secondary);">
+        {{ now.strftime('%A, %B %d, %Y') if now else '' }}
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <!-- User Management Card -->
+    <a href="/admin/users" class="card"
+        style="text-decoration: none; display: flex; flex-direction: column; height: 100%;">
+        <div class="stat-icon" style="background-color: rgba(41, 182, 246, 0.1); color: var(--info);">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <h3 style="margin-top: 1.5rem; font-size: 1.25rem;">Manage Users</h3>
+        <p style="color: var(--secondary); margin-top: 0.5rem; flex: 1;">View, edit, and manage all registered users in
+            the system.</p>
+        <span
+            style="color: var(--primary); font-weight: 600; margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            Go to Users <i class="fa-solid fa-arrow-right"></i>
+        </span>
+    </a>
+
+    <!-- Syllabus Management Card -->
+    <a href="/admin/syllabus" class="card"
+        style="text-decoration: none; display: flex; flex-direction: column; height: 100%;">
+        <div class="stat-icon" style="background-color: rgba(102, 187, 106, 0.1); color: var(--success);">
+            <i class="fa-solid fa-book-open"></i>
+        </div>
+        <h3 style="margin-top: 1.5rem; font-size: 1.25rem;">Manage Syllabus</h3>
+        <p style="color: var(--secondary); margin-top: 0.5rem; flex: 1;">Organize courses, semesters, subjects, and
+            units.</p>
+        <span
+            style="color: var(--primary); font-weight: 600; margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            Manage Syllabus <i class="fa-solid fa-arrow-right"></i>
+        </span>
+    </a>
+
+    <!-- Feedback Card -->
+    <a href="/admin/feedbacks" class="card"
+        style="text-decoration: none; display: flex; flex-direction: column; height: 100%;">
+        <div class="stat-icon" style="background-color: rgba(255, 117, 76, 0.1); color: var(--accent);">
+            <i class="fa-solid fa-comments"></i>
+        </div>
+        <h3 style="margin-top: 1.5rem; font-size: 1.25rem;">View Feedbacks</h3>
+        <p style="color: var(--secondary); margin-top: 0.5rem; flex: 1;">Read and respond to user feedback and
+            inquiries.</p>
+        <span
+            style="color: var(--primary); font-weight: 600; margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            Check Feedbacks <i class="fa-solid fa-arrow-right"></i>
+        </span>
+    </a>
+</div>
+{% endblock %}

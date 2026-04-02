@@ -1,0 +1,12 @@
+Flask
+PyMySQL
+numpy
+joblib
+langchain-community
+langchain-core
+langchain-text-splitters
+PyMuPDF
+python-dotenv
+sentence-transformers
+faiss-cpu
+langchain-groq

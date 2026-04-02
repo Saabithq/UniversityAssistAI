@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}{{ subject }} - Units{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <a href="/syllabus/{{ course_id if course_id is not none else 0 }}/{{ semester_id if semester_id is not none else 0 }}"
+            style="color: var(--secondary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Subjects
+        </a>
+        <h1>{{ subject }}</h1>
+        <p style="color: var(--secondary);">Browse units and study materials</p>
+    </div>
+</div>
+
+<div style="display: grid; gap: 2rem;">
+    {% for unit in units %}
+    <div class="card">
+        <div style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                <div style="flex: 1;">
+                    <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--primary);">{{ unit[2] }}</h2>
+                    <p style="color: var(--secondary); line-height: 1.6;">{{ unit[3] }}</p>
+                </div>
+                <a href="/syllabus/subject/{{ subject1[0] }}/chatAi?unit_id={{ unit[0] }}"
+                    style="padding: 0.6rem 1.2rem; background: var(--secondary-bg); border: 1px solid var(--primary); border-radius: var(--radius-sm); color: var(--primary); font-weight: 600; text-decoration: none; font-size: 0.85rem; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
+                    onmouseover="this.style.background='var(--primary)'; this.style.color='white'"
+                    onmouseout="this.style.background='var(--secondary-bg)'; this.style.color='var(--primary)'">
+                    <i class="fa-solid fa-comments"></i> Chat with Unit
+                </a>
+            </div>
+        </div>
+
+        <h4 style="font-size: 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-book-open-reader" style="color: var(--accent);"></i> Study Materials
+        </h4>
+
+        {% if unit[0] in materials_by_unit %}
+        <div style="display: grid; gap: 0.8rem;">
+            {% for material in materials_by_unit[unit[0]] %}
+            <div style="text-decoration: none;">
+                <div
+                    style="background: #F8FAFB; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; align-items: center; gap: 1rem; transition: var(--transition);">
+                    <div
+                        style="width: 40px; height: 40px; background: rgba(255, 117, 76, 0.1); color: var(--accent); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <span style="display: block; color: var(--text-primary); font-weight: 500;">{{ material[2]
+                            }}</span>
+                        <span style="font-size: 0.8rem; color: var(--secondary);">PDF Document</span>
+                    </div>
+                    <i class="fa-solid fa-download" style="color: var(--secondary);"></i>
+                </div>
+                <div style="margin-top: 1rem; display: flex; gap: 0.8rem;">
+                    <a href="/static/{{ material[3] }}" target="_blank"
+                        style="flex: 1; text-align: center; padding: 0.7rem; background: white; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.5rem;"
+                        onmouseover="this.style.borderColor='var(--primary)'; this.style.color='var(--primary)'"
+                        onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-primary)'">
+                        <i class="fa-solid fa-eye"></i> View PDF
+                    </a>
+                    <a href="/syllabus/subject/{{ subject1[0] }}/chatAi?material_id={{ material[0] }}"
+                        style="flex: 1; text-align: center; padding: 0.7rem; background: var(--primary); border-radius: var(--radius-sm); color: white; font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 0.5rem;"
+                        onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                        <i class="fa-solid fa-comment-dots"></i> Chat with AI
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% else %}
+            <div
+                style="padding: 1rem; background: #F8FAFB; border-radius: var(--radius-sm); color: var(--secondary); font-size: 0.9rem; border: 1px dashed var(--border);">
+                No materials available for this unit yet.
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="card" style="text-align: center; padding: 3rem; color: var(--secondary);">
+            <i class="fa-solid fa-layer-group" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+            <p>No units found for this subject.</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}

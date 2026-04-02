@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}My Gallery{% endblock %}
+
+{% block content %}
+<!-- Top Control Bar -->
+<div class="dashboard-header" style="flex-wrap: wrap; gap: 1rem; align-items: center;">
+    <div>
+        <h1
+            style="font-size: 1.8rem; background: -webkit-linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+            My Learning Gallery</h1>
+        <p style="color: var(--secondary);">Explore your courses</p>
+    </div>
+
+    <div style="display: flex; gap: 1rem; align-items: center; margin-left: auto;">
+        <!-- Search -->
+        <div style="position: relative; display: none; @media (min-width: 600px) { display: block; }">
+            <i class="fa-solid fa-search"
+                style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--secondary);"></i>
+            <input type="text" placeholder="Search..."
+                style="padding: 0.6rem 1rem 0.6rem 2.5rem; border: 1px solid var(--border); border-radius: 50px; background: white; width: 200px;">
+        </div>
+
+        <!-- Action Buttons -->
+        <button onclick="document.getElementById('tasksModal').style.display='block'" class="btn-secondary"
+            style="border-radius: 50px; padding: 0.6rem 1.2rem; background: white; border: 1px solid var(--border);">
+            <i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Tasks
+        </button>
+
+        <button onclick="document.getElementById('feedbackModal').style.display='block'" class="btn-secondary"
+            style="border-radius: 50px; padding: 0.6rem 1.2rem; background: white; border: 1px solid var(--border);">
+            <i class="fa-regular fa-comment-dots" style="color: var(--accent);"></i> Feedback
+        </button>
+
+        <a href="/syllabus/subject/0/chatAi?reset=1" class="btn-primary"
+            style="border-radius: 50px; padding: 0.6rem 1.5rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fa-solid fa-robot"></i> Chat PDF
+        </a>
+    </div>
+</div>
+
+<!-- Courses Gallery Grid -->
+{% if syllabus %}
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; padding: 1rem 0;">
+    {% for course in syllabus %}
+    <!-- Deterministic Color Logic based on ID (simple cycle) -->
+    {% set colors = ['linear-gradient(135deg, #6C5DD3 0%, #8B78E6 100%)',
+    'linear-gradient(135deg, #FF754C 0%, #FF9F85 100%)',
+    'linear-gradient(135deg, #3F8CFF 0%, #6EA5FF 100%)',
+    'linear-gradient(135deg, #FFCD38 0%, #FFDD75 100%)'] %}
+    {% set bg_color = colors[course.id % 4] %}
+
+    <div class="card"
+        style="padding: 0; overflow: hidden; border: none; border-radius: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;"
+        onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)'"
+        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-sm)'">
+
+        <!-- Art/Icon Area -->
+        <div
+            style="height: 160px; background: {{ bg_color }}; display: flex; align-items: center; justify-content: center; position: relative;">
+            <i class="fa-solid fa-shapes"
+                style="font-size: 4rem; color: rgba(255,255,255,0.25); position: absolute; top: 10px; right: 10px;"></i>
+            <i class="fa-solid fa-book-bookmark"
+                style="font-size: 3.5rem; color: white; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));"></i>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 1.5rem;">
+            <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem; font-weight: 600; color: var(--text-primary);">{{
+                course.name }}</h3>
+            <p style="color: var(--secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">Explore full syllabus</p>
+            <a href="/syllabus/{{ course.id }}" class="btn-secondary"
+                style="width: 100%; justify-content: center; background: #F0F2F5; border: none; color: var(--text-primary); font-weight: 600;">
+                Open <i class="fa-solid fa-arrow-right" style="margin-left: 0.5rem;"></i>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div
+    style="text-align: center; padding: 4rem; background: white; border-radius: var(--radius-lg); border: 1px dashed var(--border);">
+    <i class="fa-solid fa-gallery-thumbnails"
+        style="font-size: 3rem; color: var(--secondary); opacity: 0.5; margin-bottom: 1rem;"></i>
+    <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">Gallery Empty</h3>
+    <p style="color: var(--secondary);">No courses added yet.</p>
+</div>
+{% endif %}
+
+
+<!-- MODALS -->
+
+<!-- Tasks Modal -->
+<div id="tasksModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; backdrop-filter: blur(2px);">
+    <div class="card"
+        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 500px; max-height: 80vh; display: flex; flex-direction: column;">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-list-check"
+                    style="color: var(--primary);"></i> My Tasks</h3>
+            <button onclick="document.getElementById('tasksModal').style.display='none'"
+                style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--secondary);">&times;</button>
+        </div>
+
+        <!-- Add Task Form -->
+        <form action="/todo/create" method="post"
+            style="margin-bottom: 1.5rem; background: #F8FAFB; padding: 1rem; border-radius: var(--radius-sm);">
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" name="title" placeholder="New task..." required
+                    style="flex: 1; padding: 0.6rem; border: 1px solid var(--border); border-radius: 4px;">
+                <button type="submit" class="btn-primary" style="padding: 0.6rem 1rem;"><i
+                        class="fa-solid fa-plus"></i></button>
+            </div>
+            <input type="hidden" name="description" value="">
+        </form>
+
+        <!-- Task List -->
+        <div style="flex: 1; overflow-y: auto; padding-right: 0.5rem;">
+            {% if todos %}
+            {% for todo in todos %}
+            <div
+                style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; border-bottom: 1px solid var(--border); transition: background 0.2s;">
+                <form action="/todo/update/{{ todo[0] }}" method="post" style="margin: 0;">
+                    <input type="hidden" name="title" value="{{ todo[2] }}">
+                    <input type="hidden" name="description" value="{{ todo[3] }}">
+                    <input type="hidden" name="status"
+                        value="{% if todo[4]=='Pending' %}Completed{% else %}Pending{% endif %}">
+                    <button type="submit"
+                        style="background: none; border: none; cursor: pointer; color: {% if todo[4]=='Completed' %}var(--success){% else %}var(--border){% endif %}; font-size: 1.2rem;">
+                        <i class="fa-regular fa-circle-check"></i>
+                    </button>
+                </form>
+                <div style="flex: 1;">
+                    <span class="{% if todo[4]=='Completed' %}task-completed{% endif %}"
+                        style="display: block; font-weight: 500;">{{ todo[2] }}</span>
+                </div>
+                <form action="/todo/delete/{{ todo[0] }}" method="post" style="margin: 0;">
+                    <button type="submit" onclick="return confirm('Delete?')"
+                        style="background: none; border: none; color: var(--danger); cursor: pointer; opacity: 0.7;">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div style="text-align: center; padding: 2rem; color: var(--secondary);">
+                <i class="fa-solid fa-check-double" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.3;"></i>
+                <p>No tasks found. Yay!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Feedback Modal -->
+<div id="feedbackModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; backdrop-filter: blur(2px);">
+    <div class="card"
+        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;"><i
+                    class="fa-regular fa-comment-dots" style="color: var(--accent);"></i> Feedback</h3>
+            <button onclick="document.getElementById('feedbackModal').style.display='none'"
+                style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--secondary);">&times;</button>
+        </div>
+        <form action="/feedback" method="post">
+            <textarea name="message" class="form-control" rows="4" placeholder="Your thoughts..." required
+                style="margin-bottom: 1rem; border: 1px solid var(--border); width: 100%; padding: 0.8rem; border-radius: var(--radius-sm);"></textarea>
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">Send
+                Feedback</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

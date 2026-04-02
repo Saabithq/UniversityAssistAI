@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Units{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <a href="/admin/semester/{{ semester[0] }}/subjects"
+            style="color: var(--secondary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Subjects
+        </a>
+        <h1>Manage Units</h1>
+        <p style="color: var(--secondary);">For Subject: <span style="color: var(--primary); font-weight: 600;">{{
+                subject[2] }}</span></p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+
+    <!-- Add Unit Form -->
+    <div class="card" style="height: fit-content;">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Add Unit</h3>
+        <form action="/admin/unit/add" method="post">
+            <input type="hidden" name="subject_id" value="{{ subject[0] }}">
+            <div class="form-group">
+                <label class="form-label">Unit Name</label>
+                <input type="text" name="name" class="form-control" placeholder="e.g. Unit 1" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea name="description" class="form-control" rows="4" placeholder="Description..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-plus"></i> Add
+            </button>
+        </form>
+    </div>
+
+    <!-- Unit List -->
+    <div class="card" style="background: transparent; box-shadow: none; border: none; padding: 0;">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Existing Units</h3>
+
+        {% if units %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+            {% for unit in units %}
+            <div class="card" style="display: flex; flex-direction: column;">
+                <div style="flex: 1; margin-bottom: 1rem;">
+                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; color: var(--text-primary);">{{ unit[2] }}</h4>
+                    <p style="color: var(--secondary); font-size: 0.9rem; line-height: 1.5;">{{ unit[3] }}</p>
+                </div>
+
+                <div
+                    style="border-top: 1px solid var(--border); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <a href="/admin/unit/{{ unit[0] }}/materials"
+                        style="text-decoration: none; color: var(--secondary); font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; transition: color 0.2s;"
+                        onmouseover="this.style.color='var(--primary)'"
+                        onmouseout="this.style.color='var(--secondary)'">
+                        <i class="fa-solid fa-file-pdf"></i> Materials
+                    </a>
+                    <form action="/admin/unit/delete/{{ unit[0] }}" method="post" style="margin: 0;"
+                        onsubmit="return confirm('Delete this unit?');">
+                        <button type="submit"
+                            style="background: none; border: none; color: var(--danger); cursor: pointer; opacity: 0.5;">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card" style="text-align: center; padding: 3rem; color: var(--secondary);">
+            <i class="fa-solid fa-layer-group" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+            <p>No units found for this subject.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    @media (max-width: 900px) {
+        div[style*="grid-template-columns: 1fr 2fr"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

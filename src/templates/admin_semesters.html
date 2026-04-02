@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Semesters{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <a href="/admin/syllabus"
+            style="color: var(--secondary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Courses
+        </a>
+        <h1>Manage Semesters</h1>
+        <p style="color: var(--secondary);">For Course: <span style="color: var(--primary); font-weight: 600;">{{
+                course[1] }}</span></p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+
+    <!-- Add Semester Form -->
+    <div class="card" style="height: fit-content;">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Add Semester</h3>
+        <form action="/admin/semester/add" method="post">
+            <input type="hidden" name="course_id" value="{{ course[0] }}">
+            <div class="form-group">
+                <label class="form-label">Semester Name</label>
+                <input type="text" name="name" class="form-control" placeholder="e.g. Semester 1" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-plus"></i> Add
+            </button>
+        </form>
+    </div>
+
+    <!-- Semester List -->
+    <div class="card">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Existing Semesters</h3>
+
+        {% if semesters %}
+        <div style="display: grid; gap: 1rem;">
+            {% for semester in semesters %}
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #F8FAFB; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                <div>
+                    <h4 style="margin: 0; font-size: 1.1rem;">{{ semester[2] }}</h4>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <a href="/admin/semester/{{ semester[0] }}/subjects" class="btn-secondary"
+                        style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+                        Manage Subjects <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <form action="/admin/semester/delete/{{ semester[0] }}" method="post" style="display:inline;"
+                        onsubmit="return confirm('Delete this semester?');">
+                        <button type="submit" class="btn-secondary"
+                            style="padding: 0.4rem 0.8rem; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 2rem; color: var(--secondary);">
+            <p>No semesters found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    @media (max-width: 900px) {
+        div[style*="grid-template-columns: 1fr 2fr"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

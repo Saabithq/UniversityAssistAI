@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <a href="/user_dashboard"
+            style="color: var(--secondary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <h1>My Profile</h1>
+    </div>
+</div>
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="card" style="text-align: center;">
+        <div style="position: relative; width: 150px; height: 150px; margin: 0 auto 2rem;">
+            {% if user[6] %}
+            <img src="/static/profile_photos/{{ user[6] }}" alt="Profile Photo"
+                style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid var(--background);">
+            {% else %}
+            <div
+                style="width: 100%; height: 100%; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; font-weight: 700; border: 4px solid var(--background);">
+                {{ user[1][0] | upper }}
+            </div>
+            {% endif %}
+        </div>
+
+        <h2 style="margin-bottom: 0.5rem;">{{ user[1] }} {{ user[2] }}</h2>
+        <p style="color: var(--secondary); margin-bottom: 2rem;">@{{ user[4] }}</p>
+
+        <div
+            style="text-align: left; background: #F8FAFB; padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+            <div style="display: grid; gap: 1rem;">
+                <div
+                    style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                    <span style="color: var(--secondary);">First Name</span>
+                    <span style="font-weight: 500;">{{ user[1] }}</span>
+                </div>
+                <div
+                    style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                    <span style="color: var(--secondary);">Last Name</span>
+                    <span style="font-weight: 500;">{{ user[2] }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem;">
+                    <span style="color: var(--secondary);">Contact</span>
+                    <span style="font-weight: 500;">{{ user[3] }}</span>
+                </div>
+            </div>
+        </div>
+
+        <a href="/profile/edit" class="btn-primary">
+            <i class="fa-solid fa-user-pen"></i> Edit Profile
+        </a>
+    </div>
+</div>
+{% endblock %}

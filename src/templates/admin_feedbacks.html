@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}User Feedbacks{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <a href="/admin/dashboard"
+            style="color: var(--secondary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <h1>User Feedbacks</h1>
+        <p style="color: var(--secondary);">Read what your users have to say</p>
+    </div>
+</div>
+
+<div class="card">
+    {% if feedbacks %}
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; background-color: #F8FAFB; border-bottom: 1px solid var(--border);">
+                    <th style="padding: 1rem; color: var(--text-secondary); font-weight: 600; width: 150px;">Date</th>
+                    <th style="padding: 1rem; color: var(--text-secondary); font-weight: 600; width: 200px;">User</th>
+                    <th style="padding: 1rem; color: var(--text-secondary); font-weight: 600;">Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedbacks %}
+                <tr style="border-bottom: 1px solid var(--border); vertical-align: top;">
+                    <td style="padding: 1rem; color: var(--secondary); white-space: nowrap;">{{ feedback[4] }}</td>
+                    <td style="padding: 1rem;">
+                        <div style="font-weight: 500;">{{ feedback[1] }} {{ feedback[2] }}</div>
+                        <div style="font-size: 0.85rem; color: var(--secondary);">Student</div>
+                    </td>
+                    <td style="padding: 1rem; line-height: 1.6;">
+                        <div
+                            style="background: #F8FAFB; padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                            {{ feedback[3] }}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 3rem; color: var(--secondary);">
+        <i class="fa-solid fa-comments" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+        <p>No feedbacks received yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

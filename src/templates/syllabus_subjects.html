@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Select Subject{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <a href="/syllabus/{{ course_id }}"
+            style="color: var(--secondary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Semesters
+        </a>
+        <h1>{{ semester }}</h1>
+        <p style="color: var(--secondary);">Select a subject to view units</p>
+    </div>
+</div>
+
+<div class="card">
+    {% if subjects %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        {% for subject in subjects %}
+        <a href="/syllabus/subject/{{ subject[0] }}" style="text-decoration: none;">
+            <div class="card"
+                style="background: #F8FAFB; border: 1px solid var(--border); box-shadow: none; transition: var(--transition); height: 100%; padding: 1.5rem;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div
+                        style="width: 50px; height: 50px; background: rgba(41, 182, 246, 0.1); color: var(--info); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+                    <span
+                        style="background: rgba(128, 129, 145, 0.1); color: var(--text-secondary); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 500;">
+                        {{ subject[3] }}
+                    </span>
+                </div>
+                <h3 style="margin: 0; color: var(--text-primary); font-size: 1.1rem; line-height: 1.4;">{{ subject[2] }}
+                </h3>
+                <div
+                    style="margin-top: 1rem; color: var(--primary); font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                    View Units <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 3rem; color: var(--secondary);">
+        <i class="fa-solid fa-book-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+        <p>No subjects found for this semester.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

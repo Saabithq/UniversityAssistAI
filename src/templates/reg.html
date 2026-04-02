@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 4rem auto;">
+    <div class="card">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h1 style="color: var(--primary);">Create Account</h1>
+            <p style="color: var(--secondary);">Join Rushda today</p>
+        </div>
+
+        <form action="/register1" method="post">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" name="fname" class="form-control" placeholder="John" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" name="lname" class="form-control" placeholder="Doe" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Contact Number</label>
+                <input type="text" name="contacts" class="form-control" placeholder="1234567890" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Choose a username" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Create a strong password"
+                    required>
+                <small style="color: var(--text-secondary); font-size: 0.8rem; display: block; margin-top: 0.5rem;">
+                    Must contain 8+ chars, uppercase, lowercase, number, special char
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="confirm_password" class="form-control" placeholder="Confirm your password"
+                    required>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                Register <i class="fa-solid fa-user-plus"></i>
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <p style="color: var(--secondary); font-size: 0.9rem;">
+                Already have an account? <a href="/" style="color: var(--primary); font-weight: 600;">Login
+                    here</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

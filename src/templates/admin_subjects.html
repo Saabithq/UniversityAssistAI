@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Subjects{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <a href="/admin/course/{{ course[0] }}/semesters"
+            style="color: var(--secondary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Semesters
+        </a>
+        <h1>Manage Subjects</h1>
+        <p style="color: var(--secondary);">For Semester: <span style="color: var(--primary); font-weight: 600;">{{
+                semester[2] }}</span></p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+
+    <!-- Add Subject Form -->
+    <div class="card" style="height: fit-content;">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Add Subject</h3>
+        <form action="/admin/subject/add" method="post">
+            <input type="hidden" name="semester_id" value="{{ semester[0] }}">
+            <div class="form-group">
+                <label class="form-label">Subject Name</label>
+                <input type="text" name="name" class="form-control" placeholder="e.g. Data Structures" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Subject Code</label>
+                <input type="text" name="code" class="form-control" placeholder="e.g. CS101" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-plus"></i> Add
+            </button>
+        </form>
+    </div>
+
+    <!-- Subject List -->
+    <div class="card" style="background: transparent; box-shadow: none; border: none; padding: 0;">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Existing Subjects</h3>
+
+        {% if subjects %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+            {% for subject in subjects %}
+            <div class="card" style="display: flex; flex-direction: column;">
+                <div style="flex: 1; margin-bottom: 1rem;">
+                    <span
+                        style="background: rgba(63, 140, 255, 0.1); color: var(--info); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin-bottom: 0.8rem;">
+                        {{ subject[3] }}
+                    </span>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">{{ subject[2] }}</h3>
+                </div>
+
+                <div
+                    style="border-top: 1px solid var(--border); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <a href="/admin/subject/{{ subject[0] }}/units"
+                        style="text-decoration: none; color: var(--info); font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
+                        Manage Units <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <form action="/admin/subject/delete/{{ subject[0] }}" method="post" style="margin: 0;"
+                        onsubmit="return confirm('Delete this subject?');">
+                        <button type="submit"
+                            style="background: none; border: none; color: var(--secondary); cursor: pointer; opacity: 0.5;">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card" style="text-align: center; padding: 3rem; color: var(--secondary);">
+            <i class="fa-solid fa-book" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+            <p>No subjects found for this semester.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    @media (max-width: 900px) {
+        div[style*="grid-template-columns: 1fr 2fr"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

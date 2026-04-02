@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Syllabus{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <a href="/admin/dashboard"
+            style="color: var(--secondary); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <h1>Manage Syllabus</h1>
+        <p style="color: var(--secondary);">Create and manage courses</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+
+    <!-- Add Course Form -->
+    <div class="card" style="height: fit-content;">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Add New Course</h3>
+        <form action="/admin/course/add" method="post">
+            <div class="form-group">
+                <label class="form-label">Course Name</label>
+                <input type="text" name="name" class="form-control" placeholder="e.g. Computer Science" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea name="description" class="form-control" rows="4" placeholder="Course details..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fa-solid fa-plus"></i> Add Course
+            </button>
+        </form>
+    </div>
+
+    <!-- Course List -->
+    <div class="card" style="background: transparent; box-shadow: none; border: none; padding: 0;">
+        <h3 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Existing Courses</h3>
+
+        {% if courses %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+            {% for course in courses %}
+            <div class="card" style="display: flex; flex-direction: column; transition: transform 0.2s;"
+                onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                <div style="flex: 1; margin-bottom: 1.5rem;">
+                    <div
+                        style="width: 50px; height: 50px; background: rgba(108, 93, 211, 0.1); color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 1.2rem;">{{ course[1] }}</h3>
+                    <p style="color: var(--secondary); font-size: 0.9rem; line-height: 1.5;">{{ course[2] }}</p>
+                </div>
+
+                <div
+                    style="border-top: 1px solid var(--border); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <a href="/admin/course/{{ course[0] }}/semesters"
+                        style="text-decoration: none; color: var(--primary); font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
+                        Manage Semesters <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <form action="/admin/course/delete/{{ course[0] }}" method="post"
+                        onsubmit="return confirm('Delete this course?');" style="margin: 0;">
+                        <button type="submit"
+                            style="background: none; border: none; color: var(--danger); cursor: pointer; opacity: 0.7; font-size: 1rem; padding: 0.5rem;">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card" style="text-align: center; padding: 3rem; color: var(--secondary);">
+            <i class="fa-solid fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+            <p>No courses found. Add one to get started!</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- CSS for responsive grid -->
+<style>
+    @media (max-width: 900px) {
+        div[style*="grid-template-columns: 1fr 2fr"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}
